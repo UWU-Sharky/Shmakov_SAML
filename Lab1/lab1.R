@@ -11,14 +11,14 @@ set.seed(123)
 
 # Задание 1.1-----------------
 
-lambda <- 0.5
+
 p <- 0.3
 q <- 1-p
-data_exp <- rexp(n = 150, rate = lambda)
-data_geom <- rgeom(n = 150, prob = p) 
+data_binom <- rbinom(150, size = 10, prob = p)
+data_geom <- rgeom(n = 150, prob = p)
 
 # Задание 1.2-----------------
-plot(ecdf(data_exp), main = "Эмпирическая функция распределения rexp",
+plot(ecdf(data_binom), main = "Эмпирическая функция распределения rbinom",
      xlab = "x", ylab = "F(x)", col = "blue")
 
 hist_1 <- hist(data_exp, plot = TRUE, col = "lightgray", main = "Полигон частот для rexp")

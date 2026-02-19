@@ -11,11 +11,12 @@ set.seed(123)
 
 # Задание 1.1-----------------
 
+alpha <- 2
+beta <- 0.5
 lambda <- 0.5
-p <- 0.3
-q <- 1-p
 data_exp <- rexp(n = 150, rate = lambda)
-data_geom <- rgeom(n = 150, prob = p) 
+data_gamma <- rgamma(n = 150,shape = alpha, rate = beta)
+
 
 # Задание 1.2-----------------
 plot(ecdf(data_exp), main = "Эмпирическая функция распределения rexp",
