@@ -14,14 +14,15 @@ set.seed(123)
 
 p <- 0.3
 q <- 1-p
-data_binom <- rbinom(150, size = 10, prob = p)
+n <- 10
+data_binom <- rbinom(150, size = n, prob = p)
 data_geom <- rgeom(n = 150, prob = p)
 
 # Задание 1.2-----------------
 plot(ecdf(data_binom), main = "Эмпирическая функция распределения rbinom",
      xlab = "x", ylab = "F(x)", col = "blue")
 
-hist_1 <- hist(data_exp, plot = TRUE, col = "lightgray", main = "Полигон частот для rexp")
+hist_1 <- hist(data_binom, plot = TRUE, col = "lightgray", main = "Полигон частот для rexp")
 lines(hist_1$mids, hist_1$counts, col = "red", type = "l")
 
 plot(ecdf(data_geom), main = "Эмпирическая функция распределения rgeom",
@@ -33,49 +34,49 @@ lines(hist_2$mids, hist_2$counts, col = "red", type = "l")
 # Задание 1.3-----------------
 
 # Выборочное среднее
-sample_mean_exp <- mean(data_exp)
-sample_mean_exp
+sample_mean_binom <- mean(data_binom)
+sample_mean_binom
 sample_mean_geom <- mean(data_geom)
 sample_mean_geom
 
 # Дисперсия
-sample_variance_exp <- var(data_exp)
-sample_variance_exp
+sample_variance_binom <- var(data_binom)
+sample_variance_binom
 sample_variance_geom <- var(data_geom)
 sample_variance_geom
 
 # СКО
-sd_exp <- sd(data_exp)
-sd_exp
+sd_binom <- sd(data_binom)
+sd_binom
 sd_geom <- sd(data_geom)
 sd_geom
 
 # Медиана
-median_exp <- median(data_exp)
-median_exp
+median_binom <- median(data_binom)
+median_binom
 median_geom <- median(data_geom)
 median_geom
 
-# Медиана
-mlv_exp <- mlv(data_exp)
-mlv_exp
+# Мода
+mlv_binom <- mlv(data_binom)
+mlv_binom
 mlv_geom <- mlv(data_geom)
 mlv_geom
 
 # Коэффициент асимметрии
-skewness_value_exp <- skewness(data_exp)
-skewness_value_exp
+skewness_value_binom <- skewness(data_binom)
+skewness_value_binom
 skewness_value_geom <- skewness(data_geom)
 skewness_value_geom
 
 # Коэффициент эксцесса
-kurtosis_value_exp <- kurtosis(data_exp)
+kurtosis_value_binom <- kurtosis(data_binom)
 kurtosis_value_geom <- kurtosis(data_geom)
 
 # Задание 1.4-----------------
 
-theoretical_mean_exp <- 1 / lambda
-theoretical_variance_exp <- 1 / (lambda^2)
+theoretical_mean_binom <- n*p
+theoretical_variance_binom <- n*p*q
 
 theoretical_mean_geom <- q / p
 theoretical_variance_geom <- q / (p^2)
@@ -92,20 +93,20 @@ results <- data.frame(
     "Дисперсия (выборочная)"
   ),
   Распределение = c(
-    "Экспоненциальное",
-    "Экспоненциальное",
-    "Экспоненциальное",
-    "Экспоненциальное",
+    "Биномиальное",
+    "Биномиальное",
+    "Биномиальное",
+    "Биномиальное",
     "Геометрическое",
     "Геометрическое",
     "Геометрическое",
     "Геометрическое"
   ),
   Значение = c(
-    theoretical_mean_exp,
-    sample_mean_exp,
-    theoretical_variance_exp,
-    sample_variance_exp,
+    theoretical_mean_binom,
+    sample_mean_binom,
+    theoretical_variance_binom,
+    sample_variance_binom,
     theoretical_mean_geom,
     sample_mean_geom,
     theoretical_variance_geom,
@@ -117,8 +118,8 @@ print(results)
 
 # Задание 1.4-----------------
 
-lambda_hat <- 1 / sample_mean_exp
-cat("Оценка параметра lambda_hat:",  lambda_hat, "\n")
+np_hat <- 1 / sample_mean_binom
+cat("Оценка параметра np_hat:",  np_hat, "\n")
 
 p_hat <- 1 / (sample_mean_geom + 1)  # +1, так как rgeom генерирует количество неудач
 cat("Оценка параметра p_hat:", p_hat, "\n")
@@ -127,19 +128,19 @@ cat("Оценка параметра p_hat:", p_hat, "\n")
 # Задание 1.5-----------------
 
 # Хи^2 для экспоненциального распред.
-exphc = hist(data_exp,plot=FALSE)$counts
+binomhc = hist(data_binom,plot=FALSE)$counts
 
-exphb = hist(data_exp,plot=FALSE)$breaks
+binomhb = hist(data_binom,plot=FALSE)$breaks
 
-k = length(exphc)
+k = length(binomhc)
 
-exphb[1]=-Inf; exphb[k+1]=Inf
+binomhb[1]=-Inf; binomhb[k+1]=Inf
 
-pnth=pnorm(exphb,theoretical_mean_exp,theoretical_variance_exp)
+pnth=pnorm(binomhb,theoretical_mean_binom,theoretical_variance_binom)
 
 thfr=pnth[2:(k+1)]-pnth[1:k]
 
-chisq.test(exphc,p=thfr)
+chisq.test(binomhc,p=thfr)
 
 # Хи^2 для геометрического распред.
 geomhc = hist(data_geom,plot=FALSE)$counts
